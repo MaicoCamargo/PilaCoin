@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="PilaCoin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bin/PilaCoin.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
