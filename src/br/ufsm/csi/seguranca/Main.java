@@ -48,16 +48,17 @@ public class Main {
 
     public static void enviarDataGrama() throws Exception {
         final String meuId="Maico C.";
+        final int porta= 3333;
         Mensagem mensagem = new Mensagem();
         mensagem.setIdOrigem(meuId);
         mensagem.setTipo(Mensagem.TipoMensagem.DISCOVER);
         mensagem.setChavePublica(RSAUtil.getPublicKey("public_key.der"));
-        mensagem.setPorta(3333);
+        mensagem.setPorta(44447);
 
         //socket cliente
-        DatagramSocket clientSocket = new DatagramSocket(3333);
-        String  servidor = "192.168.90.221";
-        int porta = 3333;
+        DatagramSocket clientSocket = new DatagramSocket(porta);
+        String  servidor = "127.0.0.1";
+
         InetAddress IPAddress = InetAddress.getByName(servidor);
         System.out.println("   -- mensagem criada  para mandar para o datagrama -> \n   ");
         byte[] mensagemSerealizada = serealizarObjeto(mensagem);
