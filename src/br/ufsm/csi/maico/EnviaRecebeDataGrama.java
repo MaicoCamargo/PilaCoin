@@ -1,23 +1,26 @@
 package br.ufsm.csi.maico;
-
-import br.ufsm.csi.seguranca.pila.model.Mensagem;
-import br.ufsm.csi.seguranca.util.RSAUtil;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import static br.ufsm.csi.seguranca.Main.deserializarObjeto;
-import static br.ufsm.csi.seguranca.Main.serealizarObjeto;
+import br.ufsm.csi.seguranca.pila.model.Mensagem;
+import br.ufsm.csi.seguranca.pila.model.PilaCoin;
+import br.ufsm.csi.seguranca.util.RSAUtil;
+
+import static br.ufsm.csi.seguranca.util.Utils.deserializarObjeto;
+import static br.ufsm.csi.seguranca.util.Utils.serealizarObjeto;
 
 public class EnviaRecebeDataGrama implements Runnable {
 
     final String meuId="Maico C.";
     final int porta= 3333;
     DatagramSocket clientSocket;
+    private PilaCoin pilaCoin;
 
-
+    public EnviaRecebeDataGrama(PilaCoin pilaCoin) {
+        this.pilaCoin = pilaCoin;
+    }
 
     public void enviarDataGrama() throws Exception {
         clientSocket = new DatagramSocket(4444);
@@ -31,7 +34,7 @@ public class EnviaRecebeDataGrama implements Runnable {
         //socket cliente - onde são enviados os dados
         String  servidor = "127.0.0.1";
         InetAddress IPAddress = InetAddress.getByName(servidor);
-        System.out.println("   -- mensagem criada  para mandar para o datagrama -> \n   ");
+        //System.out.println("   -- mensagem criada  para mandar para o datagrama -> \n   ");
         byte[] mensagemSerealizada = serealizarObjeto(mensagem);// serealiza a msg
 
         //envia pacote UDP para servidor
@@ -49,12 +52,11 @@ public class EnviaRecebeDataGrama implements Runnable {
             if (respostaServidor.getTipo() == Mensagem.TipoMensagem.DISCOVER){
                 System.out.println("minha mensagem !");
             }else{
-                System.out.println("não é minha mensagem *-*");
-                System.out.println("- "+respostaServidor.getIdOrigem() + " ip: "+respostaServidor.getEndereco() + " Porta: "+respostaServidor.getPorta());
-                System.out.println("- MASTER: "+respostaServidor.isMaster());
-                System.out.println("- TIPO: "+respostaServidor.getTipo());
+                //System.out.println("- ORIGEM: "+respostaServidor.getIdOrigem() + " ip: "+respostaServidor.getEndereco() + " Porta: "+respostaServidor.getPorta());
+                //System.out.println("- MASTER: "+respostaServidor.isMaster());
+                //System.out.println("- TIPO: "+respostaServidor.getTipo());
+                new Thread(new ValidaPilaCoinServidor(pilaCoin,respostaServidor.getEndereco(),respostaServidor.getPorta())).start();
             }
-            System.out.println("final do socket !");
             clientSocket.close();
     }
 
@@ -65,7 +67,7 @@ public class EnviaRecebeDataGrama implements Runnable {
             while (true){
                 enviarDataGrama();
                 recebeDataGrama();
-                Thread.sleep((long)1500);
+                Thread.sleep((long)2000);
             }
         } catch (Exception e) {
             System.out.println("erro na thread envia e recebe datagrama");
