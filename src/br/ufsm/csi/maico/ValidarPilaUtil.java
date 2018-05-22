@@ -66,7 +66,7 @@ public class ValidarPilaUtil implements Runnable {
             ObjetoTroca objetoResposta = (ObjetoTroca) in.readObject();
             //desrealiza o obj recebido do servidor usando minha chave de sessao
             PilaCoin pilaResposta = (PilaCoin) Utils.deserializarObjeto(Utils.descriptografar("AES", chaveSessao,objetoResposta.getObjetoSerializadoCriptografado()));
-
+            System.out.println("pila valido");
             //guardo meu pila no meu computador
             File meuPilaValido = new File("/home/camargo/IdeaProjects/PilaCoin/src/br/ufsm/csi/maico/pila/"+pilaResposta.getId());
             FileOutputStream fileOutputStream = new FileOutputStream(meuPilaValido);

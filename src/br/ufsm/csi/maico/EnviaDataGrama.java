@@ -12,7 +12,8 @@ import static br.ufsm.csi.seguranca.util.Utils.serealizarObjeto;
 public class EnviaDataGrama implements Runnable {
 
     final int porta= 3333;// onde vai ser enviada a resposta do servidor
-    final String ip= "127.0.0.1";
+    //final String ip= "127.0.0.1";
+    final String ip= "192.168.90.221"; //192.168.90.221 - prof
     DatagramSocket clientSocket;
     String meuId;
 
@@ -24,13 +25,14 @@ public class EnviaDataGrama implements Runnable {
     @Override
     public void run() {
         try {
+            clientSocket.setBroadcast(true);
             while(true) {
                 Mensagem msg = new Mensagem();
                 msg.setTipo(Mensagem.TipoMensagem.DISCOVER);
                 msg.setChavePublica(RSAUtil.getPublicKey("public_key.der"));
                 msg.setIdOrigem(meuId);
                 msg.setMaster(false);
-                msg.setPorta(4444);
+                msg.setPorta(3333);
                 msg.setAssinatura(null);
 
                 byte[] buffer = serealizarObjeto(msg);

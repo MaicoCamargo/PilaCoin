@@ -33,8 +33,10 @@ public class RecebeDataGrama implements Runnable {
                 clientSocket.receive(receivePacket);
                 Mensagem respostaServidor = (Mensagem) deserializarObjeto(receivePacket.getData());//desserealizo a msg recebida
                 if (respostaServidor.getTipo().equals(Mensagem.TipoMensagem.DISCOVER) && !respostaServidor.getIdOrigem().equals(meuId)) {
-                    System.out.println("fazer transf.");
-                }else {
+                    System.out.println("fazer transf.: "+respostaServidor.getIdOrigem());
+                }
+                if(respostaServidor.getTipo().equals(Mensagem.TipoMensagem.DISCOVER_RESP)){
+                    System.out.println("TIPO:" + respostaServidor.getTipo()+"\n");
                     byte[] assinatura = respostaServidor.getAssinatura();
                     respostaServidor.setAssinatura(null);
 
@@ -44,7 +46,6 @@ public class RecebeDataGrama implements Runnable {
                     Cipher cipher = Cipher.getInstance("RSA");
                     cipher.init(Cipher.DECRYPT_MODE, RSAUtil.getMasterPublicKey());
                     byte[] assinaturaServidor = cipher.doFinal(assinatura);
-
                     if (Arrays.equals(messageDigest, assinaturaServidor)) {
                         System.out.println("MASTER DESCOBERTO! porta: "+respostaServidor.getPorta() + " end:"+ respostaServidor.getEndereco());
                         new Thread(new MineraPilacoin(respostaServidor)).start();
