@@ -14,14 +14,15 @@ import static br.ufsm.csi.seguranca.util.Utils.serealizarObjeto;
 
 public class MineraPilacoin implements Runnable {
 
-    final String meuId="Maico C.";
+    final String meuId;
     final BigInteger NUMERO_VERIFICADOR_SERVIDOR = new BigInteger("99999998000000000000000000000000000000000000000000000000000000000000000");
     private static PublicKey publicKey;
     private BigInteger hash_bigInteger;
     private Mensagem response_servidor;
 
-    public MineraPilacoin(Mensagem response_servidor) {
+    public MineraPilacoin(Mensagem response_servidor, String meuId) {
         this.response_servidor = response_servidor;
+        this.meuId = meuId;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class MineraPilacoin implements Runnable {
                 hash = digest.digest(Utils.serealizarObjeto(pilaCoin));
                 hash_bigInteger = new BigInteger(1, hash);
             }
-            System.out.println("minerado pilacoin !");
+            System.out.println("pilacoin minerado !");
             //deppois de encontrado um numero menor que o numero magico iniciasse a validacao do pila minerado
             new Thread(new ValidarPilaUtil(pilaCoin, response_servidor)).start();
 

@@ -13,7 +13,7 @@ public class EnviaDataGrama implements Runnable {
 
     final int porta= 3333;// onde vai ser enviada a resposta do servidor
     //final String ip= "127.0.0.1";
-    final String ip= "192.168.90.221"; //192.168.90.221 - prof
+    final String ip= "255.255.255.255";
     DatagramSocket clientSocket;
     String meuId;
 
@@ -32,13 +32,13 @@ public class EnviaDataGrama implements Runnable {
                 msg.setChavePublica(RSAUtil.getPublicKey("public_key.der"));
                 msg.setIdOrigem(meuId);
                 msg.setMaster(false);
-                msg.setPorta(3333);
+                msg.setPorta(4444);
                 msg.setAssinatura(null);
 
                 byte[] buffer = serealizarObjeto(msg);
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(ip), porta);
                 clientSocket.send(packet);
-                System.out.println("Enviado o msg pro servidor ");
+                 System.out.println("Enviado o msg pro servidor ");
                 Thread.sleep((long) 15000);
             }
         }catch (Exception e){

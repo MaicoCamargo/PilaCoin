@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import br.ufsm.csi.seguranca.pila.model.Mensagem;
+import br.ufsm.csi.seguranca.server.model.Usuario;
 import br.ufsm.csi.seguranca.util.RSAUtil;
 import javax.crypto.*;
 
@@ -32,8 +33,15 @@ public class RecebeDataGrama implements Runnable {
                 DatagramPacket receivePacket = new DatagramPacket(response, response.length);
                 clientSocket.receive(receivePacket);
                 Mensagem respostaServidor = (Mensagem) deserializarObjeto(receivePacket.getData());//desserealizo a msg recebida
+
                 if (respostaServidor.getTipo().equals(Mensagem.TipoMensagem.DISCOVER) && !respostaServidor.getIdOrigem().equals(meuId)) {
+                    //realiza a transferencia dos pila!
                     System.out.println("fazer transf.: "+respostaServidor.getIdOrigem());
+                    Usuario usuario = new Usuario();
+                    usuario.setChavePublica(respostaServidor.getChavePublica());
+                    usuario.setEndereco(respostaServidor.getEndereco());
+                    usuario.setId(respostaServidor.getIdOrigem());
+                    new Thread(new TransferirPila(usuario, clientSocket, meuId)).start();
                 }
                 if(respostaServidor.getTipo().equals(Mensagem.TipoMensagem.DISCOVER_RESP)){
                     System.out.println("TIPO:" + respostaServidor.getTipo()+"\n");
@@ -48,9 +56,9 @@ public class RecebeDataGrama implements Runnable {
                     byte[] assinaturaServidor = cipher.doFinal(assinatura);
                     if (Arrays.equals(messageDigest, assinaturaServidor)) {
                         System.out.println("MASTER DESCOBERTO! porta: "+respostaServidor.getPorta() + " end:"+ respostaServidor.getEndereco());
-                        new Thread(new MineraPilacoin(respostaServidor)).start();
+                        new Thread(new MineraPilacoin(respostaServidor, meuId)).start();
                     } else {
-                        System.out.println("Não são iguais "+messageDigest +"   "+assinaturaServidor);
+                        System.out.println("Não são iguais "+messageDigest +"!="+assinaturaServidor);
                     }
                 }
         }
