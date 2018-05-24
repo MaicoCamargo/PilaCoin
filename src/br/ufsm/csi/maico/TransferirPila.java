@@ -46,7 +46,7 @@ public class TransferirPila implements Runnable {
                 transacaos.add(transacao);
                 pilaTransferir.setTransacoes(transacaos);
 
-                File file = new File("//home/camargo/IdeaProjects/PilaCoin/src/br/ufsm/csi/maico/pila/"+pilaTransferir.getId());
+                File file = new File("/home/camargo/IdeaProjects/PilaCoin/src/br/ufsm/csi/maico/pila/"+pilaTransferir.getId());
                 FileOutputStream out = new FileOutputStream(file);
                 out.write(Utils.serealizarObjeto(pilaTransferir));
 
@@ -59,9 +59,9 @@ public class TransferirPila implements Runnable {
                 msg.setAssinatura(null);
                 msg.setPilaCoin(pilaTransferir);
                 byte[] buffer = Utils.serealizarObjeto(msg);
-                System.out.println("Enviado o packet com Transf!" + buffer.length);
+                System.out.println("Enviado o packet com Transf! " + buffer.length+" tamanho");
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("255.255.255.255"), 3333);
-                this.clientSocket.send(packet);
+                //clientSocket.send(packet);
                 stream.close();
             }
 

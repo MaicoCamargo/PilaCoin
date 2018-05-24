@@ -8,8 +8,8 @@ import java.net.DatagramSocket;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-         DatagramSocket clientSocket = new DatagramSocket(4444);
         final String meuId="Maico C.";
+        DatagramSocket clientSocket = new DatagramSocket(3333);
         new Thread(new EnviaDataGrama(clientSocket,meuId)).start();
         new Thread(new RecebeDataGrama(clientSocket,meuId)).start();
 
