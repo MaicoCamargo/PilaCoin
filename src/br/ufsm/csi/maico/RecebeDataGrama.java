@@ -33,8 +33,8 @@ public class RecebeDataGrama implements Runnable {
                 DatagramPacket receivePacket = new DatagramPacket(response, response.length);
                 clientSocket.receive(receivePacket);
                 Mensagem respostaServidor = (Mensagem) deserializarObjeto(receivePacket.getData());//desserealizo a msg recebida
-
-                if (respostaServidor.getTipo().equals(Mensagem.TipoMensagem.DISCOVER) && !respostaServidor.getIdOrigem().equals(meuId)) {
+                System.out.println("TIPO:" + respostaServidor.getTipo()+"\n");
+                if (respostaServidor.getTipo().equals(Mensagem.TipoMensagem.DISCOVER) /*&& !respostaServidor.getIdOrigem().equals(meuId)*/) {
                     //realiza a transferencia dos pila!
                     System.out.println("fazer transf.: "+respostaServidor.getIdOrigem());
                     Usuario usuario = new Usuario();
@@ -44,7 +44,7 @@ public class RecebeDataGrama implements Runnable {
                     new Thread(new TransferirPila(usuario, clientSocket, meuId)).start();
                 }
                 if(respostaServidor.getTipo().equals(Mensagem.TipoMensagem.DISCOVER_RESP)){
-                    System.out.println("TIPO:" + respostaServidor.getTipo()+"\n");
+
                     byte[] assinatura = respostaServidor.getAssinatura();
                     respostaServidor.setAssinatura(null);
 
@@ -55,7 +55,7 @@ public class RecebeDataGrama implements Runnable {
                     cipher.init(Cipher.DECRYPT_MODE, RSAUtil.getMasterPublicKey());
                     byte[] assinaturaServidor = cipher.doFinal(assinatura);
                     if (Arrays.equals(messageDigest, assinaturaServidor)) {
-                        System.out.println("MASTER DESCOBERTO! porta: "+respostaServidor.getPorta() + " end:"+ respostaServidor.getEndereco());
+                        //System.out.println("MASTER DESCOBERTO! porta: "+respostaServidor.getPorta() + " end:"+ respostaServidor.getEndereco());
                         new Thread(new MineraPilacoin(respostaServidor, meuId)).start();
                     } else {
                         System.out.println("Não são iguais "+messageDigest +"!="+assinaturaServidor);

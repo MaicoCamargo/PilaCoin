@@ -28,7 +28,7 @@ public class MineraPilacoin implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("minerando !");
+            //System.out.println("minerando !");
             SecureRandom random = new SecureRandom();
             publicKey = RSAUtil.getPublicKey("public_key.der");
 
@@ -49,7 +49,7 @@ public class MineraPilacoin implements Runnable {
                 hash = digest.digest(Utils.serealizarObjeto(pilaCoin));
                 hash_bigInteger = new BigInteger(1, hash);
             }
-            System.out.println("pilacoin minerado !");
+            //System.out.println("pilacoin minerado !");
             //deppois de encontrado um numero menor que o numero magico iniciasse a validacao do pila minerado
             new Thread(new ValidarPilaUtil(pilaCoin, response_servidor)).start();
 

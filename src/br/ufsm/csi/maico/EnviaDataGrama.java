@@ -11,7 +11,7 @@ import static br.ufsm.csi.seguranca.util.Utils.serealizarObjeto;
 
 public class EnviaDataGrama implements Runnable {
 
-    final int porta= 3333;// onde vai ser enviada a resposta do servidor
+    final int porta = 3333;// onde vai ser enviada a resposta do servidor
     //final String ip= "127.0.0.1";
     final String ip= "255.255.255.255";
     DatagramSocket clientSocket;
@@ -38,8 +38,8 @@ public class EnviaDataGrama implements Runnable {
                 byte[] buffer = serealizarObjeto(msg);
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(ip), porta);
                 clientSocket.send(packet);
-                 System.out.println("Enviado o msg pro servidor ");
-                Thread.sleep((long) 15000);
+                 //System.out.println("Enviado o msg pro servidor ");
+                Thread.sleep((long) 6000);
             }
         }catch (Exception e){
             e.printStackTrace();
