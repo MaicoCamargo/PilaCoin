@@ -32,7 +32,7 @@ public class TransferirPila implements Runnable {
             if (verificaPilaTrans() == -1) {
                 System.out.println("NÃO TEM PILA DISPONIVEL.");
             } else {
-                FileInputStream filePila = new FileInputStream("/home/osman/Downloads/PilaCoin-Osman/PilaCoin/"+verificaPilaTrans());
+                FileInputStream filePila = new FileInputStream("/home/camargo/IdeaProjects/PilaCoin/src/br/ufsm/csi/maico/pila/"+verificaPilaTrans());
                 ObjectInputStream stream = new ObjectInputStream(filePila);
                 PilaCoin pilaTransferir = (PilaCoin) stream.readObject();
 
@@ -46,7 +46,7 @@ public class TransferirPila implements Runnable {
                 transacaos.add(transacao);
                 pilaTransferir.setTransacoes(transacaos);
 
-                File file = new File("/home/osman/Downloads/PilaCoin-Osman/PilaCoin/"+pilaTransferir.getId());
+                File file = new File("//home/camargo/IdeaProjects/PilaCoin/src/br/ufsm/csi/maico/pila/"+pilaTransferir.getId());
                 FileOutputStream out = new FileOutputStream(file);
                 out.write(Utils.serealizarObjeto(pilaTransferir));
 
